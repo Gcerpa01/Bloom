@@ -7,12 +7,13 @@
 
 import Foundation
 import CoreBluetooth
+import SwiftUI
+
 
 struct Peripheral: Identifiable{
     let id: Int
     var name: String
     let rssi: Int
-    
 }
 
 
@@ -27,7 +28,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate,CBPeriphe
     var bloomDevice:CBPeripheral!
     var bloomCommand:CBCharacteristic!
     
-    var dataVal : UInt = 1
+    var dataVal : UInt8 = 255
     
     static let shared = BLEManager()
     
@@ -62,14 +63,6 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate,CBPeriphe
             peripheralName = "Unknown"
         }
         
-        /*
-         if(peripheralName == "Unknown"){
-         let unknownPeripheral = Peripheral(id:peripherals.count, name: peripheralName, rssi: RSSI.intValue)
-         print("unknown peripheral: \(unknownPeripheral)")
-         peripherals.append(unknownPeripheral)
-         
-         }
-         */
         
         if(peripheralName != "Unknown"){
             let newPeripheral = Peripheral(id:peripherals.count, name: peripheralName, rssi: RSSI.intValue)
@@ -107,12 +100,13 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate,CBPeriphe
     
     ///display the peripherals services and match to the one we know is Bloom
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
+            //print list of services provided by peripheral
             if let peripheralServices = peripheral.services {
                     print("list of services")
                     for service in peripheralServices {
                             print(service.uuid)
                             print(service.uuid.uuidString)
-                
+                    //check for known coded source froma Arduino Project
                     if service.uuid == CBUUID(string:"FFE0"){
                         self.bloomDevice.discoverCharacteristics(nil, for: service)
                     }
@@ -121,13 +115,13 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate,CBPeriphe
                 }
     }
     
-    //Find characteristics of the [eripheral
+    //Find characteristics of the Peripheral
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
         if let serviceCharacteristics = service.characteristics {
             print("list of characteristics")
             for characteristic in serviceCharacteristics {
                 print(characteristic) //find available characteristics
-                if characteristic.uuid == CBUUID(string:"41FF"){
+                if characteristic.uuid == CBUUID(string:"FFE1"){
                     print("connected")
                     self.bloomCommand = characteristic
                 }
@@ -142,21 +136,17 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate,CBPeriphe
     }
     
     
-    func sendData(){
-        let dataToWrite = NSData(bytes: &dataVal, length: MemoryLayout<UInt8>.size)
-        self.bloomDevice.writeValue(dataToWrite as Data, for: bloomCommand,  type: CBCharacteristicWriteType.withoutResponse)
+    func sendAnimation(selectedmode:String){
+        //dataVal = selectedmode
+        //convert digit to NSData type for sending over BLE
+        //**Sending Data for String**//
+        let valueString = (selectedmode as NSString).data(using: String.Encoding.utf8.rawValue)
+        bloomDevice.writeValue(valueString!, for: bloomCommand, type: CBCharacteristicWriteType.withoutResponse)
+        
+        
     }
     
-    func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
-        if characteristic.uuid == bloomCommand.uuid {
-            if error != nil {
-                print("code not sent")
-            }
-            else {
-                print("code sent")
-            }
-        }
-    }
+
     
 }
 

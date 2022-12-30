@@ -1,18 +1,20 @@
 //
-//  Animations.swift
+//  Audio.swift
 //  Bloom
 //
-//  Created by Gerardo on 11/18/21.
+//  Created by Gerardo on 11/19/21.
 //
 
 import SwiftUI
 
-struct Animations: View { 
+struct Audio: View {
     @Binding var status:Bool
+    @Binding var chosenMode:String
+    
+    @EnvironmentObject var bleManager : BLEManager
     
     var body: some View {
             ZStack{
-                
                 LinearGradient(gradient: backgroundGradient, startPoint: .topLeading, endPoint: .bottomTrailing)
                     .ignoresSafeArea()
                 
@@ -50,7 +52,7 @@ struct Animations: View {
                     
                     HStack{
                         Spacer()
-                        Text("Animations")
+                        Text("Visualizer Modes")
                             .font(.title)
                             .foregroundColor(Color(red:190/255,green:240/255,blue:180/255))
                             .frame(maxWidth: .infinity, alignment: .leading)
@@ -64,7 +66,9 @@ struct Animations: View {
 
                         
                         Button(action:{
-                            print("Play pride")
+                            chosenMode = "WAV"
+                            self.bleManager.sendAnimation(selectedmode: chosenMode)
+                            print("Play with rainbow")
                         }, label: {
                             VStack(alignment: .center){
                                 Image(systemName: "globe.asia.australia")
@@ -74,11 +78,15 @@ struct Animations: View {
                                     .frame(width: 110, height: 110)
                                     .foregroundColor(Color(red: 180/255, green: 190/255, blue: 230/255))
                                 
-                                Text("Pride")
+                                Text("Rainbow")
                                     .font(.subheadline)
                                     .frame(alignment:.center)
                                     .foregroundColor(Color(red: 200/255, green: 200/255, blue: 255/255))
-    
+                                Text("Visualizer")
+                                    .font(.subheadline)
+                                    .frame(alignment:.center)
+                                    .foregroundColor(Color(red: 200/255, green: 200/255, blue: 255/255))
+                                
                             }
                         })
                             .frame(width:140 , height:160)
@@ -89,8 +97,9 @@ struct Animations: View {
                         
                         
                         Button(action:{
-                            
-                            print("Pacifica")
+                            chosenMode = "SA1"
+                            self.bleManager.sendAnimation(selectedmode: chosenMode)
+                            print("Sparkle I")
                         }, label: {
                             VStack(alignment:.center){
                                 Image(systemName: "globe.asia.australia")
@@ -99,10 +108,13 @@ struct Animations: View {
                                     .scaledToFit()
                                     .frame(width: 110, height: 110)
                                     .foregroundColor(Color(red: 180/255, green: 190/255, blue: 230/255))
-                                Text("Pacifica")
+                                Text("Sparkle I")
                                     .font(.subheadline)
                                     .foregroundColor(Color(red: 200/255, green: 200/255, blue: 255/255))
-
+                                Text("Visualizer")
+                                    .font(.subheadline)
+                                    .foregroundColor(Color(red: 200/255, green: 200/255, blue: 255/255))
+                            
                             }
                             
                         })
@@ -121,7 +133,9 @@ struct Animations: View {
                         
                     
                         Button(action:{
-                            print("Light Spots")
+                            chosenMode = "SA2"
+                            self.bleManager.sendAnimation(selectedmode: chosenMode)
+                            print("Play with Sparkle II")
                         }, label: {
                             VStack(alignment: .center){
                                 Image(systemName: "globe.asia.australia")
@@ -131,11 +145,11 @@ struct Animations: View {
                                     .frame(width: 110, height: 110)
                                     .foregroundColor(Color(red: 180/255, green: 190/255, blue: 230/255))
                                 
-                                Text("Light")
+                                Text("Sparkle II")
                                     .font(.subheadline)
                                     .frame(alignment:.center)
                                     .foregroundColor(Color(red: 200/255, green: 200/255, blue: 255/255))
-                                Text("Spots")
+                                Text("Visualizer")
                                     .font(.subheadline)
                                     .frame(alignment:.center)
                                     .foregroundColor(Color(red: 200/255, green: 200/255, blue: 255/255))
@@ -147,9 +161,7 @@ struct Animations: View {
                             .cornerRadius(20)
                             //.frame(maxWidth: .infinity, alignment: .leading)
                         
-                        
                         //Spacer()
-                        
                     }
                     
                     Spacer()
@@ -162,10 +174,11 @@ struct Animations: View {
        
         }
 
+    
 }
 
-struct Animations_Previews: PreviewProvider {
+struct Audio_Previews: PreviewProvider {
     static var previews: some View {
-        Animations(status: .constant(true))
+        Audio(status: .constant(true), chosenMode:.constant("OFF"))
     }
 }

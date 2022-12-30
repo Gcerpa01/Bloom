@@ -1,16 +1,17 @@
 //
-//  Audio.swift
+//  Animations.swift
 //  Bloom
 //
-//  Created by Gerardo on 11/19/21.
+//  Created by Gerardo on 11/18/21.
 //
 
 import SwiftUI
 
-struct Audio: View {
+struct Animations: View { 
     @Binding var status:Bool
+    @Binding var chosenMode:String
+    @EnvironmentObject var bleManager : BLEManager
 
-    
     var body: some View {
             ZStack{
                 
@@ -18,9 +19,7 @@ struct Audio: View {
                     .ignoresSafeArea()
                 
                 VStack{
-                    
                     HStack{
-                        
                         Button(action: {
                             status = false
                         }, label: {
@@ -51,7 +50,7 @@ struct Audio: View {
                     
                     HStack{
                         Spacer()
-                        Text("Visualizer Modes")
+                        Text("Animations")
                             .font(.title)
                             .foregroundColor(Color(red:190/255,green:240/255,blue:180/255))
                             .frame(maxWidth: .infinity, alignment: .leading)
@@ -65,7 +64,9 @@ struct Audio: View {
 
                         
                         Button(action:{
-                            print("Play with rainbow")
+                            chosenMode = "PRD"
+                            self.bleManager.sendAnimation(selectedmode: chosenMode)
+                            print("Play pride")
                         }, label: {
                             VStack(alignment: .center){
                                 Image(systemName: "globe.asia.australia")
@@ -75,15 +76,11 @@ struct Audio: View {
                                     .frame(width: 110, height: 110)
                                     .foregroundColor(Color(red: 180/255, green: 190/255, blue: 230/255))
                                 
-                                Text("Rainbow")
+                                Text("Pride")
                                     .font(.subheadline)
                                     .frame(alignment:.center)
                                     .foregroundColor(Color(red: 200/255, green: 200/255, blue: 255/255))
-                                Text("Visualizer")
-                                    .font(.subheadline)
-                                    .frame(alignment:.center)
-                                    .foregroundColor(Color(red: 200/255, green: 200/255, blue: 255/255))
-                                
+    
                             }
                         })
                             .frame(width:140 , height:160)
@@ -95,7 +92,7 @@ struct Audio: View {
                         
                         Button(action:{
                             
-                            print("Sparkle I")
+                            print("Pacifica")
                         }, label: {
                             VStack(alignment:.center){
                                 Image(systemName: "globe.asia.australia")
@@ -104,13 +101,10 @@ struct Audio: View {
                                     .scaledToFit()
                                     .frame(width: 110, height: 110)
                                     .foregroundColor(Color(red: 180/255, green: 190/255, blue: 230/255))
-                                Text("Sparkle I")
+                                Text("Pacifica")
                                     .font(.subheadline)
                                     .foregroundColor(Color(red: 200/255, green: 200/255, blue: 255/255))
-                                Text("Visualizer")
-                                    .font(.subheadline)
-                                    .foregroundColor(Color(red: 200/255, green: 200/255, blue: 255/255))
-                            
+
                             }
                             
                         })
@@ -129,7 +123,7 @@ struct Audio: View {
                         
                     
                         Button(action:{
-                            print("Play with Sparkle II")
+                            print("Light Spots")
                         }, label: {
                             VStack(alignment: .center){
                                 Image(systemName: "globe.asia.australia")
@@ -139,11 +133,11 @@ struct Audio: View {
                                     .frame(width: 110, height: 110)
                                     .foregroundColor(Color(red: 180/255, green: 190/255, blue: 230/255))
                                 
-                                Text("Sparkle II")
+                                Text("Light")
                                     .font(.subheadline)
                                     .frame(alignment:.center)
                                     .foregroundColor(Color(red: 200/255, green: 200/255, blue: 255/255))
-                                Text("Visualizer")
+                                Text("Spots")
                                     .font(.subheadline)
                                     .frame(alignment:.center)
                                     .foregroundColor(Color(red: 200/255, green: 200/255, blue: 255/255))
@@ -155,7 +149,9 @@ struct Audio: View {
                             .cornerRadius(20)
                             //.frame(maxWidth: .infinity, alignment: .leading)
                         
+                        
                         //Spacer()
+                        
                     }
                     
                     Spacer()
@@ -168,11 +164,10 @@ struct Audio: View {
        
         }
 
-    
 }
 
-struct Audio_Previews: PreviewProvider {
+struct Animations_Previews: PreviewProvider {
     static var previews: some View {
-        Audio(status: .constant(true))
+        Animations(status: .constant(true), chosenMode: .constant("OFF"))
     }
 }

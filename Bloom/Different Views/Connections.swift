@@ -11,7 +11,10 @@ struct Connections: View {
     @EnvironmentObject var bleManager : BLEManager
    //@ObservedObject var bleManager = BLEManager()
 
+    @State var modeSelect : UInt8 = 255
+
     @Binding var status:Bool
+    @Binding var isConnected:Bool
 
 
     var body: some View {
@@ -71,6 +74,8 @@ struct Connections: View {
                     
                     Button(action: {
                         bleManager.connectPeripheral(item: peripherals)
+                        isConnected = true
+                        self.bleManager.stopScanning()
                     }) {
                         HStack{
                         Text(peripherals.name)
@@ -92,7 +97,9 @@ struct Connections: View {
 
                 Spacer()
                 Button(action:{
-                    self.bleManager.sendData()
+                    /*
+                    self.bleManager.sendData(selectedmode: modeSelect)
+                     */
                     self.bleManager.stopScanning()                },label:{
                     Text("Stop Scanning")
                         .bold()
@@ -110,6 +117,6 @@ struct Connections: View {
 
 struct Connections_Previews: PreviewProvider {
     static var previews: some View {
-        Connections(status: .constant(true))
+        Connections(status: .constant(true),isConnected: .constant(false))
     }
 }
