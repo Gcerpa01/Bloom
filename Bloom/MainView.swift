@@ -145,35 +145,8 @@ struct MainView: View {
                             .background(Color(red: 10/255, green: 140/255, blue: 229/255))
                             .cornerRadius(20)
                             .frame(maxWidth: .infinity, alignment: .leading)
-                    }
-                    
-                    else{
-                        Button(action:{
-                            print("NOPE")
-                        }, label: {
-                            VStack{
-                                Image(systemName: "globe.asia.australia")
-                                    .resizable()
-                                    .padding()
-                                    .scaledToFit()
-                                    .frame(width: 110, height: 110)
-                                    .foregroundColor(Color(red: 180/255, green: 190/255, blue: 230/255))
-                                Text("Audio Visualizer")
-                                    .font(.subheadline)
-                                    .foregroundColor(Color(red: 200/255, green: 200/255, blue: 255/255))
-                            }
-                        })
-                            .frame(width:140 , height:140)
-                            .background(Color(red: 10/255, green: 140/255, blue: 229/255))
-                            .cornerRadius(20)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .opacity(0.5)
-                        
-                    }
-
                     
                     
-                    if(isConnected){
                         Button(action:{
                             showAnimation = true
                             print("Choosing between basics")
@@ -194,30 +167,53 @@ struct MainView: View {
                             .background(Color(red: 20/255, green: 120/255, blue: 190/255))
                             .cornerRadius(20)
                             .frame(maxWidth: .infinity, alignment: .trailing)
+
                     }
                     
-                    else{
-                        Button(action:{
-                            print("NOPE")
-                        }, label: {
-                            VStack{
-                                Image(systemName: "globe.asia.australia")
-                                    .resizable()
-                                    .padding()
-                                    .scaledToFit()
-                                    .frame(width: 110, height: 110)
-                                    .foregroundColor(Color(red: 180/255, green: 190/255, blue: 230/255))
-                                Text("Animations")
-                                    .font(.subheadline)
-                                    .foregroundColor(Color(red: 200/255, green: 200/255, blue: 255/255))
-                            }
-                        })
-                            .frame(width:140 , height:140)
-                            .background(Color(red: 20/255, green: 120/255, blue: 190/255))
-                            .cornerRadius(20)
-                            .frame(maxWidth: .infinity, alignment: .trailing)
-                            .opacity(0.5)
-                    }
+                    //NEED TO ADD Capability in circuit 
+                    // else{
+                    //     Button(action:{
+                    //         print("NOPE")
+                    //     }, label: {
+                    //         VStack{
+                    //             Image(systemName: "globe.asia.australia")
+                    //                 .resizable()
+                    //                 .padding()
+                    //                 .scaledToFit()
+                    //                 .frame(width: 110, height: 110)
+                    //                 .foregroundColor(Color(red: 180/255, green: 190/255, blue: 230/255))
+                    //             Text("Audio Visualizer")
+                    //                 .font(.subheadline)
+                    //                 .foregroundColor(Color(red: 200/255, green: 200/255, blue: 255/255))
+                    //         }
+                    //     })
+                    //         .frame(width:140 , height:140)
+                    //         .background(Color(red: 10/255, green: 140/255, blue: 229/255))
+                    //         .cornerRadius(20)
+                    //         .frame(maxWidth: .infinity, alignment: .leading)
+                    //         .opacity(0.5)
+                        
+                    //     Button(action:{
+                    //         print("NOPE")
+                    //     }, label: {
+                    //         VStack{
+                    //             Image(systemName: "globe.asia.australia")
+                    //                 .resizable()
+                    //                 .padding()
+                    //                 .scaledToFit()
+                    //                 .frame(width: 110, height: 110)
+                    //                 .foregroundColor(Color(red: 180/255, green: 190/255, blue: 230/255))
+                    //             Text("Animations")
+                    //                 .font(.subheadline)
+                    //                 .foregroundColor(Color(red: 200/255, green: 200/255, blue: 255/255))
+                    //         }
+                    //     })
+                    //         .frame(width:140 , height:140)
+                    //         .background(Color(red: 20/255, green: 120/255, blue: 190/255))
+                    //         .cornerRadius(20)
+                    //         .frame(maxWidth: .infinity, alignment: .trailing)
+                    //         .opacity(0.5)
+                    // }
                     
                     Spacer()
                 }

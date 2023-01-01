@@ -134,7 +134,7 @@ struct Audio: View {
                     
                         Button(action:{
                             chosenMode = "SA2"
-                            self.bleManager.sendAnimation(selectedmode: chosenMode)
+                            // self.bleManager.sendAnimation(selectedmode: chosenMode)
                             print("Play with Sparkle II")
                         }, label: {
                             VStack(alignment: .center){
@@ -157,7 +157,8 @@ struct Audio: View {
                             }
                         })
                             .frame(width:140 , height:160)
-                            .background(Color(red: 10/255, green: 140/255, blue: 229/255))
+                            .background(Color(red: 20/255, green: 120/255, blue: 190/255))
+                            // .background(Color(red: 10/255, green: 140/255, blue: 229/255))
                             .cornerRadius(20)
                             //.frame(maxWidth: .infinity, alignment: .leading)
                         

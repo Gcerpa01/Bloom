@@ -109,7 +109,8 @@ struct Animations: View {
                             
                         })
                             .frame(width:140 , height:160)
-                            .background(Color(red: 10/255, green: 140/255, blue: 229/255))
+                            .background(Color(red: 20/255, green: 120/255, blue: 190/255))
+                            // .background(Color(red: 10/255, green: 140/255, blue: 229/255))
                             .cornerRadius(20)
                             .frame(maxWidth: .infinity, alignment: .trailing)
                         Spacer()
@@ -145,7 +146,8 @@ struct Animations: View {
                             }
                         })
                             .frame(width:140 , height:160)
-                            .background(Color(red: 10/255, green: 140/255, blue: 229/255))
+                            .background(Color(red: 20/255, green: 120/255, blue: 190/255))
+                            // .background(Color(red: 10/255, green: 140/255, blue: 229/255))
                             .cornerRadius(20)
                             //.frame(maxWidth: .infinity, alignment: .leading)
                         
