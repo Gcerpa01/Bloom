@@ -10,8 +10,22 @@ A timeline of my improvements and steps in this journey can be found [in this tw
  
  
  ## Steps and Resources
-  After having finished my [Blynk Audio Visualizer project](https://github.com/Gcerpa01/Blynk-Audio-Visualizer) I began to hit some issues during setup due to certain WiFis being locked by an additional user account(University Campus WiFi for instance), so I began to look for tutorials on utilizing BLE to control the arduino's mode. I first began by following the following tutorials to learn how to communicate with an HM-10 BLE Module:
-
+  After having finished my [Blynk Audio Visualizer project](https://github.com/Gcerpa01/Blynk-Audio-Visualizer) I began to hit some issues during setup due to certain WiFis being locked by an additional user account(University Campus WiFi for instance), so I began to look for tutorials on utilizing BLE to control the arduino's mode as I would no longer to depend on any external factor besides the user's source device to communicate with the BLE module
+  
+### 1. Utilizing HM-10 Module
+ I first began by following the following tutorials to learn how to communicate with an HM-10 BLE Module utilizing apps available in the app store such as LightBlue and BLE Scanner to communicate with the Arduino:
 1. [Makers Portal] (https://makersportal.com/blog/2019/10/14/bluetooth-module-with-arduino)
 2. [Instructables] (https://www.instructables.com/WS2812-controlled-with-Bluetooth-and-Arduino)
-3. 
+ The finished code for the Arduino side can be found in the [**BLE_Arduino**](https://github.com/Gcerpa01/Bloom/tree/main/BLE_Arduino) folder 
+ 
+### 2. Communicating via an App
+ Once I finished being able to communicate with the Arduino I then began to look for tutorials on writing BLE applications on iOS. The ones I found helpful were the following:
+1. [Adafruit](https://learn.adafruit.com/build-a-bluetooth-app-using-swift-5/communication)
+2. [JaredWolff](https://www.jaredwolff.com/the-ultimate-how-to-bluetooth-swift-with-hardware-in-20-minutes/)
+3. [NovelBits Part 1](https://novelbits.io/intro-ble-mobile-development-ios/)
+4. [NovelBits Part 2](https://novelbits.io/intro-ble-mobile-development-ios-part-2/)
+ I do want to note that I ended up subscribing to NovelBits to follow their tutorial a bit more in depth in order to learn to properly connect and communicate with the HM-10 Module but I also added a few free tutorials I found online and listed them first in the list above.
+ 
+
+### 3. Designing the App
+ Once I got the fundamentals down, I then went into designing the application to both work and have a UI I myself am proud off and would think is user friendly. I actually started off from scratch in order to create proper Swift Views, Navigation,
