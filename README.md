@@ -37,6 +37,7 @@ A timeline of my improvements and steps in this journey can be found [in this tw
  5. [Building First SwiftUI App - Paul Hudson](https://www.youtube.com/watch?v=aP-SQXTtWhY)
  
  The art for the application was done using both available SF Symbols and Art I made(and am still working on). The files for the application can be found in the [**Bloom**](https://github.com/Gcerpa01/Bloom/tree/main/Bloom) and [**Bloom.xcodeproj**](https://github.com/Gcerpa01/Bloom/tree/main/Bloom.xcodeproj), requiring to have xcode in order to run the applications on your iOS device(currently not on the app store)
+ 
  ---
  # Schematic
 For this project I modified my schematic from my [Blynk Audio Visualizer project](https://github.com/Gcerpa01/Blynk-Audio-Visualizer) to instead utilize an Arduino Nano and adding an HM-10 BLE module, with the final schematic appearing as below:
