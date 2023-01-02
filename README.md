@@ -24,6 +24,7 @@ A timeline of my improvements and steps in this journey can be found [in this tw
 2. [JaredWolff](https://www.jaredwolff.com/the-ultimate-how-to-bluetooth-swift-with-hardware-in-20-minutes/)
 3. [NovelBits Part 1](https://novelbits.io/intro-ble-mobile-development-ios/)
 4. [NovelBits Part 2](https://novelbits.io/intro-ble-mobile-development-ios-part-2/)
+
  I do want to note that I ended up subscribing to NovelBits to follow their tutorial a bit more in depth in order to learn to properly connect and communicate with the HM-10 Module but I also added a few free tutorials I found online and listed them first in the list above.
  
 
