@@ -10,5 +10,8 @@ A timeline of my improvements and steps in this journey can be found [in this tw
  
  
  ## Steps and Resources
- 
+  After having finished my [Blynk Audio Visualizer project](https://github.com/Gcerpa01/Blynk-Audio-Visualizer) I began to hit some issues during setup due to certain WiFis being locked by an additional user account(University Campus WiFi for instance), so I began to look for tutorials on utilizing BLE to control the arduino's mode. I first began by following the following tutorials to learn how to communicate with an HM-10 BLE Module:
 
+1. [Makers Portal] (https://makersportal.com/blog/2019/10/14/bluetooth-module-with-arduino)
+2. [Instructables] (https://www.instructables.com/WS2812-controlled-with-Bluetooth-and-Arduino)
+3. 
