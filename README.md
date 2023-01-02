@@ -28,4 +28,13 @@ A timeline of my improvements and steps in this journey can be found [in this tw
  
 
 ### 3. Designing the App
- Once I got the fundamentals down, I then went into designing the application to both work and have a UI I myself am proud off and would think is user friendly. I actually started off from scratch in order to create proper Swift Views, Navigation,
+ Once I got the fundamentals down, I then went into designing the application to both work and have a UI I myself am proud off and would think is user friendly. I actually started off from scratch in order to create proper Swift Views, Navigation, a Color Wheel(*Note: Not implemented yet on Arduino side*) and once the views were done, I then began implementing the functionality I learned in the previous step to have my UI have implemented functionality. I utilized the following tutorials in order to learn how to build the application:
+ 1. [Color Wheel - Priva 28](https://github.com/Priva28/SwiftUIColourWheel)
+ 2. [Custom Color Picker - Haipp](https://youtu.be/dPQM332JOWY)
+ 3. [Color Slider - Medium - Priva 28](https://priva28.medium.com/making-a-custom-slider-in-swiftui-db440cd6d88c)
+ 4. [The Complete Guide to NavigationView in SwiftUI - Paul Hudson](https://youtu.be/nA6Jo6YnL9g)
+ 5. [Building First SwiftUI App - Paul Hudson](https://www.youtube.com/watch?v=aP-SQXTtWhY)
+ 
+ The art for the application was done using both available SF Symbols and Art I made(and am still working on). The files for the application can be found in the [**Bloom**](https://github.com/Gcerpa01/Bloom/tree/main/Bloom) and [**Bloom.xcodeproj**](https://github.com/Gcerpa01/Bloom/tree/main/Bloom.xcodeproj), requiring to have xcode in order to run the applications on your iOS device(currently not on the app store)
+ 
+
