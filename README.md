@@ -42,5 +42,15 @@ A timeline of my improvements and steps in this journey can be found [in this tw
  # Schematic
 For this project I modified my schematic from my [Blynk Audio Visualizer project](https://github.com/Gcerpa01/Blynk-Audio-Visualizer) to instead utilize an Arduino Nano and adding an HM-10 BLE module, with the final schematic appearing as below:
 
+![Untitled_Artwork](https://user-images.githubusercontent.com/81593072/210277287-b5ef31b9-3f84-4afa-ab45-70813d645f0c.png)
+
+---
+#### Caveats
+ The project is at a point I'm happy calling it done despite it still needing a few fixes. I need to work on some of the art for the buttons of the app, as well as enhance the code on the Arduino side, and perhaps switch to a different microcontroller as this code is currently unable to use all the animations I aimed for(hence them being grayed out via the application). Additionally, this code is exclusive to iOS at the moment given it was written for me and my family and friends to be able to utilize it so working on android alternative is a goal in the long run
+
+---
+#### Final Thoughts
+ I began this project when I was in a dark spot in my life and I ended up finding a hobby I fell in love with. I have gone through multiple iterations for this project and despite it not being perfect it's at a state I am proud of what I have made and feel confident sharing it. I learned a lot about BLE, arduino, app development as well as coding but most importantly I learned about enjoying the journey and having fun with something. Hence even when I get the app on the app store I do want to leave this repo updated and available as I want anyone learning or interested in learning these things to have access to this as a learning source. 
+
 
 
