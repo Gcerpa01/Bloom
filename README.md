@@ -14,8 +14,8 @@ A timeline of my improvements and steps in this journey can be found [in this tw
   
 ### 1. Utilizing HM-10 Module
  I first began by following the following tutorials to learn how to communicate with an HM-10 BLE Module utilizing apps available in the app store such as LightBlue and BLE Scanner to communicate with the Arduino:
-1. [Makers Portal] (https://makersportal.com/blog/2019/10/14/bluetooth-module-with-arduino)
-2. [Instructables] (https://www.instructables.com/WS2812-controlled-with-Bluetooth-and-Arduino)
+1. [Makers Portal](https://makersportal.com/blog/2019/10/14/bluetooth-module-with-arduino)
+2. [Instructables](https://www.instructables.com/WS2812-controlled-with-Bluetooth-and-Arduino)
  The finished code for the Arduino side can be found in the [**BLE_Arduino**](https://github.com/Gcerpa01/Bloom/tree/main/BLE_Arduino) folder 
  
 ### 2. Communicating via an App
