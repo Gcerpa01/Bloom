@@ -25,7 +25,6 @@ struct Slider: View {
                 Text("Brightness")
                     .bold()
                     .font(.title3)
-                    //.foregroundColor(.white)
             ZStack{
                 RoundedRectangle(cornerRadius: 20)
                     //.frame(height: 30)
@@ -77,8 +76,7 @@ struct Slider: View {
                                     //compute brighness value by mappint from 0 to 1
                                     bright = sliderVal.map(from: 0...100, to: 0...1)
                                     let y = print("brightness \(bright)")
-                                    
-                    
+
                             }
                         )
 

@@ -107,10 +107,9 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate,CBPeriphe
                             print(service.uuid)
                             print(service.uuid.uuidString)
                     //check for known coded source froma Arduino Project
-                    if service.uuid == CBUUID(string:"FFE0"){
+                    if service.uuid == CBUUID(string:"4fafc201-1fb5-459e-8fcc-c5c9c331914b"){
                         self.bloomDevice.discoverCharacteristics(nil, for: service)
                     }
-                
                         }
                 }
     }
@@ -121,7 +120,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate,CBPeriphe
             print("list of characteristics")
             for characteristic in serviceCharacteristics {
                 print(characteristic) //find available characteristics
-                if characteristic.uuid == CBUUID(string:"FFE1"){
+                if characteristic.uuid == CBUUID(string:"beb5483e-36e1-4688-b7f5-ea07361b26a8"){
                     print("connected")
                     self.bloomCommand = characteristic
                 }
@@ -142,8 +141,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate,CBPeriphe
         //**Sending Data for String**//
         let valueString = (selectedmode as NSString).data(using: String.Encoding.utf8.rawValue)
         bloomDevice.writeValue(valueString!, for: bloomCommand, type: CBCharacteristicWriteType.withoutResponse)
-        
-        
+
     }
     
 

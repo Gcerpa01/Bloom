@@ -61,7 +61,7 @@ struct PickerView: View {
                 VStack{
                     Spacer()
                     Spacer()
-                    COLOR(radius: 250, bright: $bright, sat: $sat, hue: $hue)
+                    COLOR(diameter: 250, bright: $bright, sat: $sat, hue: $hue)
                     Slider(value: $value, bright: $bright,hue:$hue, sat:$sat)
                     //Text("Brightness")
                 }

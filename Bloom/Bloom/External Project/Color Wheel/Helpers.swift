@@ -41,6 +41,8 @@ func findColorsat(distance:Double,radius:Double) -> Double{
     return sat
 }
 
+
+
 struct Config {
     let minimumValue: CGFloat
     let maximumValue: CGFloat
