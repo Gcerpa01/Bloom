@@ -14,7 +14,7 @@ struct MainView: View {
     //@State private var location: CGPoint?
      @State private var showModal = false
      @State var value: CGFloat
-
+    @State var selected_position:CGPoint
     @EnvironmentObject var bleManager : BLEManager
     
 
@@ -276,7 +276,7 @@ struct MainView: View {
                 Spacer()
                 
             }
-            PickerView(value: $value, isShowing: $showModal)
+            PickerView(value: $value, selected_position: $selected_position, isShowing: $showModal)
             Spacer()
             
         }
@@ -290,6 +290,6 @@ struct MainView: View {
 
 struct MainView_Previews: PreviewProvider {
     static var previews: some View {
-        MainView(value:(0.9), showConnections:.constant(false), showAudio: .constant(false), showAnimation: .constant(false), chosenMode: .constant("OFF"),isConnected: .constant(false))
+        MainView(value:(0.9), selected_position:(CGPoint(x: 150, y: 150)), showConnections:.constant(false), showAudio: .constant(false), showAnimation: .constant(false), chosenMode: .constant("OFF"),isConnected: .constant(false))
     }
 }

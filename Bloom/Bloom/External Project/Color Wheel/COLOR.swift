@@ -19,11 +19,10 @@ struct COLOR: View {
     @Binding var bright:Double
     @Binding var sat:Double
     @Binding var hue:Double
-    
+    @Binding var selected_position:CGPoint
     
     @State private var cursor = Color.white
-    @State private var selected_position = CGPoint(x:125,y:125)
-    @State private var prev_position = CGPoint(x:125,y:125)
+
     
     var body: some View {
         
@@ -66,7 +65,7 @@ struct COLOR: View {
                 
                 //Draw cursor for selecting color
                 Circle()
-                    .fill(cursor)
+                    .fill(Color(hue: hue, saturation: sat ,brightness:bright))
                     .frame(width: radii / 5, height: radii / 5)
                     .position(selected_position) //set initial position
 //                    .offset(x:offset.width,y:offset.height) //set to last position
@@ -122,12 +121,8 @@ struct COLOR: View {
 
                                 print("hue \(hue)")
                                 
-                                cursor = Color(hue: hue, saturation: sat ,brightness:bright)
                             }   
                     )
-                    .onAppear{
-                        cursor = Color(hue: hue, saturation: sat ,brightness:bright)
-                    }
                 )
             }
             
@@ -138,6 +133,6 @@ struct COLOR: View {
 
 struct COLOR_Previews: PreviewProvider {
     static var previews: some View {
-        COLOR(diameter: 250, bright: .constant(0.9),sat:.constant(0.9),hue:.constant(0.9))
+        COLOR(diameter: 250, bright: .constant(0.9),sat:.constant(0.9),hue:.constant(0.9),selected_position: .constant(CGPoint(x: 100, y: 100)))
     }
 }

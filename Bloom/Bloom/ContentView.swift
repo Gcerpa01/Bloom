@@ -34,7 +34,7 @@ struct ContentView: View {
                 .environmentObject(ble_Manager)
         }
         else{
-            MainView(value: 1.0,showConnections: $showConnections,showAudio: $showAudio,showAnimation: $showAnimation, chosenMode:$AVImode,isConnected: $connectionStatus)
+            MainView(value: 50.0, selected_position: CGPoint(x:125,y:125),showConnections: $showConnections,showAudio: $showAudio,showAnimation: $showAnimation, chosenMode:$AVImode,isConnected: $connectionStatus)
                 .environmentObject(ble_Manager)
         
         }

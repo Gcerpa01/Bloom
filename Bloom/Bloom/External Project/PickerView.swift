@@ -12,10 +12,10 @@ struct PickerView: View {
     @State private var isSlide = false
     
     
-    @State private var bright: Double = 1.0
+    @State private var bright: Double = 0.5
     
     @Binding var value: CGFloat
-    
+    @Binding var selected_position:CGPoint
     @State private var hue: Double = 0.0
     @State private var sat: Double = 0.0
     
@@ -61,7 +61,7 @@ struct PickerView: View {
                 VStack{
                     Spacer()
                     Spacer()
-                    COLOR(diameter: 250, bright: $bright, sat: $sat, hue: $hue)
+                    COLOR(diameter: 250, bright: $bright, sat: $sat, hue: $hue,selected_position: $selected_position)
                     Slider(value: $value, bright: $bright,hue:$hue, sat:$sat)
                     //Text("Brightness")
                 }
