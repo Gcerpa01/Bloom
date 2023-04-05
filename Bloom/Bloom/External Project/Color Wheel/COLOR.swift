@@ -60,25 +60,29 @@ struct COLOR: View {
                                     .frame(width: self.diameter, height: self.diameter)
                                     .opacity(1.0 - bright)
                     )
-
+                
+                    .overlay(
+                        Circle()
+                            .stroke(lineWidth: 0.5)
+                            .frame(width: self.diameter, height: self.diameter)
+                    )
                     .overlay(
                 
                 //Draw cursor for selecting color
                 Circle()
+                    
                     .fill(Color(hue: hue, saturation: sat ,brightness:bright))
                     .frame(width: radii / 5, height: radii / 5)
                     .position(selected_position) //set initial position
-//                    .offset(x:offset.width,y:offset.height) //set to last position
-                    
                     .shadow(color: .white, radius: 2.0)
                     .shadow(color:.black,radius:2.0)
                     .overlay(
                                 Circle()
+                                    .stroke(lineWidth: 0.5)
                                     .frame(width: radii/5, height: radii/5)
-                                    .opacity(1.0 - bright)
                                     .position(selected_position)
-//                                    .offset(x:offset.width,y:offset.height)
                     )
+                   
                     .gesture(
                         DragGesture()
                             .onChanged{ val in

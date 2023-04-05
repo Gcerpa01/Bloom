@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct PickerView: View {
-    @State private var curHeight: CGFloat = 400
+    @State private var curHeight: CGFloat = 450
     @State private var isSlide = false
     
     
@@ -20,8 +20,8 @@ struct PickerView: View {
     @State private var sat: Double = 0.0
     
     
-    let minHeight: CGFloat = 400
-    let maxHeight: CGFloat = 600
+    let minHeight: CGFloat = 450
+    let maxHeight: CGFloat = 500
     @Binding var isShowing: Bool
     var body: some View {
         ZStack(alignment:.bottom){
@@ -61,7 +61,7 @@ struct PickerView: View {
                 VStack{
                     Spacer()
                     Spacer()
-                    COLOR(diameter: 250, bright: $bright, sat: $sat, hue: $hue,selected_position: $selected_position)
+                    COLOR(diameter: 300, bright: $bright, sat: $sat, hue: $hue,selected_position: $selected_position)
                     Slider(value: $value, bright: $bright,hue:$hue, sat:$sat)
                     //Text("Brightness")
                 }
