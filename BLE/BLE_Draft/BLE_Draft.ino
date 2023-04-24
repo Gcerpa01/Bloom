@@ -18,8 +18,11 @@
 /* -------------------------------- */
 /*  ---------- BLE Control -------- */
 /*  ------------------------------ */
-#include <SoftwareSerial.h>
-SoftwareSerial ble(9,10);
+#include <BLEDevice.h>
+#include <BLEServer.h>
+#include <BLEUtils.h>
+#include <BLE2902.h>
+
 char select_code[4] = "OFF";
 
 /*  ------------------------------ */
@@ -43,27 +46,122 @@ int lightStatus = 0;
 //Create led object
 Color led;
 
+BLEServer *pServer;
+BLECharacteristic *pCharacteristic;
+bool deviceConnected = false;
+bool connectTimer = false;
+unsigned long currentMillis,prevMillis;
+#define SERVICE_UUID           "6E400001-B5A3-F393-E0A9-E50E24DCCA9E" // UART service UUID
+#define CHARACTERISTIC_UUID_RX "6E400002-B5A3-F393-E0A9-E50E24DCCA9E"
+#define CHARACTERISTIC_UUID_TX "6E400003-B5A3-F393-E0A9-E50E24DCCA9E"
+
+class MyServerCallbacks: public BLEServerCallbacks {
+    void onConnect(BLEServer* pServer) {
+      if(!deviceConnected){
+        currentMillis = millis();
+        connectTimer = true;
+        Serial.println("Timer started to connect");
+      }
+      else{
+        Serial.println("a device is already paired");
+        ESP.restart();
+      }
+    };
+
+    void onDisconnect(BLEServer* pServer) {
+      deviceConnected = false;
+      Serial.println("Device is not connected");
+      pServer->startAdvertising(); // restart advertising after disconnecting
+    }
+};
+
+
+
+class MyCallbacks: public BLECharacteristicCallbacks {
+    void onWrite(BLECharacteristic *pCharacteristic) {
+      std::string rxValue = pCharacteristic->getValue();
+
+      if (rxValue.length() > 0) {
+        Serial.println("*********");
+        Serial.print("Received Value: ");
+        for (int i = 0; i < rxValue.length(); i++) {
+          Serial.print(rxValue[i]);
+        }
+        Serial.println();
+
+        if(!deviceConnected){
+          if(rxValue.find("CODE") != -1){
+            deviceConnected = true;
+            connectTimer = false;
+            Serial.println("Successfully paired");
+          }
+        }
+        else{
+        
+        // Do stuff based on the command received from the app
+        if (rxValue.find("OFF") != -1) { 
+          lightStatus = 0;
+        }
+        else if(rxValue.find("WAV") != -1){
+          lightStatus = 1;
+        }
+
+        else if(rxValue.find("PRD") != -1){
+          lightStatus = 2;
+        }
+
+        else if(rxValue.find("SA1") != -1){
+          lightStatus = 3;
+        }
+        
+        }
+
+        Serial.println();
+        Serial.println("*********");
+      }
+    }
+};
+
+
+
 void setup() {
-Serial.begin(9600);
-ble.begin(9600);
+  Serial.begin(9600);
+  delay(100);
 
 
-delay(100);
+  // Create the BLE Device
+  BLEDevice::init("Bloom"); // Give it a name
+
+  // Create the BLE Server
+  BLEServer *pServer = BLEDevice::createServer();
+  pServer->setCallbacks(new MyServerCallbacks());
+
+  // Create the BLE Service
+  BLEService *pService = pServer->createService(SERVICE_UUID);
+
+  // Create a BLE Characteristic
+  pCharacteristic = pService->createCharacteristic(
+                      CHARACTERISTIC_UUID_TX,
+                      BLECharacteristic::PROPERTY_NOTIFY
+                    );
+                      
+  pCharacteristic->addDescriptor(new BLE2902());
+
+  BLECharacteristic *pCharacteristic = pService->createCharacteristic(
+                                         CHARACTERISTIC_UUID_RX,
+                                         BLECharacteristic::PROPERTY_WRITE
+                                       );
+
+  pCharacteristic->setCallbacks(new MyCallbacks());
+
+  // Start the service
+  pService->start();
+
+  // Start advertising
+  pServer->getAdvertising()->start();
+  Serial.println("Waiting a client connection to notify...");
 
 
-sendCommand("AT+NAME?");
-delay(100);
-sendCommand("AT+NAMEBLOOMHUB");
-delay(100);
-
-sendCommand("AT+ROLE0"); //role as peripheral; 1 for central
-delay(100);
-
-sendCommand("AT+UUID0xFFE00"); //uuid
-delay(100);
-
-sendCommand("AT+CHAR0xFFE01"); //uuid chara
-delay(100);
 
 /*  ------------------------------ */
 /*  -------- Set Up LEDS --------- */
@@ -89,72 +187,21 @@ digitalWrite(strobePin, HIGH);
 
 }
 
-void sendCommand(const char* command){
-  Serial.print("Order sent");
-  Serial.println(command);
-  ble.println(command); //send command
-  delay(100);
-
-  char reply[100];
-
-  int i = 0;
-
-  while(ble.available()){ //if hm10 is available read back from it
-    reply[i] = ble.read();
-    i+=1;
-  }
-  reply[i] = '\0';
-
-  Serial.print(reply);
-  Serial.println("Reply Success");
-}
-
-
 //Create an array of different methods to dictate the mode that will be
 //running with the program
 typedef void(*Spectremodes[])();
 Spectremodes pos = {off,audio,pride,sparkle_AudioI};
 
-void selectMode(){
-  if(strcmp(select_code,"OFF") == 0){
-    lightStatus = 0;
-  }
-  else if (strcmp(select_code,"WAV")==0){
-    lightStatus = 1;
-  }
-  else if (strcmp(select_code,"PRD")==0){
-    lightStatus = 2;
-  }
-  else if (strcmp(select_code,"SA1")==0){
-    lightStatus = 3;
-  }
-}
-
-
-void chooseMode(){
-  char reply[4];
-  int i = 0;
-  while (ble.available()) {
-    reply[i] = ble.read();
-    if(reply[i] != 'X'){
-      select_code[i] = reply[i];
-    }
-    i += 1;
-  }
-  //end the string
-  reply[i] = '\0';
-  if(strlen(reply) > 0){
-    //Serial.println(reply); //verify code received 
-    //Serial.println(select_code); //verify what's used 
-  }
-}
-
 void loop() {
-  chooseMode();
-  selectMode();
-  //Serial.println(lightStatus);
+  if(connectTimer){
+    if(currentMillis - prevMillis >= 9000){
+      Serial.println("Do not connect device");
+      connectTimer = false;
+      ESP.restart();
+    }
+  }
   pos[lightStatus]();
-  // put your main code here, to run repeatedly:
+   // put your main code here, to run repeatedly:
 }
 
 //Runs the audio visualizer function to display
@@ -198,7 +245,7 @@ void off() {
     brightness = brightness - 10;           //Subtract 10 from the bright variable and save it
     FastLED.setBrightness(brightness);  //Set LED strip Brightness to the value storged in "Bright"
     FastLED.show();                 //Update LED strip
-    delay(10);                      //Wait for 20ms
+    delay(10);                      //Wait for 10ms
     }while(brightness > 0);             //Go back to start of the loop if Bight is bigger then 0
     FastLED.clear();
     brightness = 50;                    //turn of LED strip
@@ -208,7 +255,7 @@ void off() {
 
 //Changes animation to sample provided in FastLED library
 void pride(){
-  
+    
     Color pride;
     pride.pridefx();
     Serial.println("Pride is on");
