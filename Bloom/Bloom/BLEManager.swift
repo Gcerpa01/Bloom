@@ -64,7 +64,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate,CBPeriphe
         }
         
         
-        if(peripheralName != "Unknown"){
+        if(peripheralName.contains("Bloom")){
             let newPeripheral = Peripheral(id:peripherals.count, name: peripheralName, rssi: RSSI.intValue)
             print(newPeripheral)
             peripherals.append(newPeripheral)

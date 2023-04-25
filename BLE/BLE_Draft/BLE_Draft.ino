@@ -51,9 +51,9 @@ BLECharacteristic *pCharacteristic;
 bool deviceConnected = false;
 bool connectTimer = false;
 unsigned long currentMillis,prevMillis;
-#define SERVICE_UUID           "6E400001-B5A3-F393-E0A9-E50E24DCCA9E" // UART service UUID
-#define CHARACTERISTIC_UUID_RX "6E400002-B5A3-F393-E0A9-E50E24DCCA9E"
-#define CHARACTERISTIC_UUID_TX "6E400003-B5A3-F393-E0A9-E50E24DCCA9E"
+#define SERVICE_UUID           "f56d1221-e24d-4b61-bbb6-cb8929f3a63b" // UART service UUID
+#define CHARACTERISTIC_UUID_RX "49360c8a-37b2-4fb8-b7f5-9957cb972fbc"
+#define CHARACTERISTIC_UUID_TX "7afe65ae-976c-4a3a-84c1-8c33984019b7"
 
 class MyServerCallbacks: public BLEServerCallbacks {
     void onConnect(BLEServer* pServer) {
@@ -199,6 +199,10 @@ void loop() {
       connectTimer = false;
       ESP.restart();
     }
+  }
+  if(deviceConnected){
+    pCharacteristic -> setValue("Connected");
+    pCharacteristic->notify();
   }
   pos[lightStatus]();
    // put your main code here, to run repeatedly:
