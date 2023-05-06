@@ -43,7 +43,7 @@ class Color{
   /*Additional animating options that do not require any audio reads*/
   void staticLED(int r, int g, int b,int bright);
   void pridefx();
-
+  void customColor(int vals[]);
   
 };
 

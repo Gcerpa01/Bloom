@@ -230,3 +230,8 @@ void Color :: sparkleAudioI(int vals[]){
   pitch_hue= 0;
   color_hue = 255;
 }
+
+void Color ::customColor(int vals[]){
+  fill_solid(leds,NUM_LEDS,CHSV(vals[0],vals[1],vals[2]));
+  FastLED.show();
+}

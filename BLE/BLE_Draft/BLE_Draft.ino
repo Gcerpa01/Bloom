@@ -43,6 +43,7 @@ int brightness = 50;
 /*  ------------------------------ */
 //Control variables to help dictate the mode running
 int lightStatus = 0;
+int colorWheelValues[3];
 //Create led object
 Color led;
 
@@ -54,7 +55,7 @@ unsigned long currentMillis,prevMillis;
 #define SERVICE_UUID           "f56d1221-e24d-4b61-bbb6-cb8929f3a63b" // UART service UUID
 #define CHARACTERISTIC_UUID_RX "49360c8a-37b2-4fb8-b7f5-9957cb972fbc"
 #define CHARACTERISTIC_UUID_TX "7afe65ae-976c-4a3a-84c1-8c33984019b7"
-
+#define CHARACTERISTIC_UUID_RX2 "325d04af-b205-4b96-a656-4ca6547159c8"
 class MyServerCallbacks: public BLEServerCallbacks {
     void onConnect(BLEServer* pServer) {
       if(!deviceConnected){
@@ -90,7 +91,7 @@ class MyCallbacks: public BLECharacteristicCallbacks {
         Serial.println();
 
         if(!deviceConnected){
-          if(rxValue.find("CODE") != -1){
+          if(rxValue.find("CC") != -1){
             deviceConnected = true;
             connectTimer = false;
             Serial.println("Successfully paired");
@@ -123,11 +124,45 @@ class MyCallbacks: public BLECharacteristicCallbacks {
 };
 
 
+class MyCustom: public BLECharacteristicCallbacks {
+  void onWrite(BLECharacteristic *pCharacteristic){
+    std::string rxValue = pCharacteristic->getValue();
+      if (deviceConnected) {
+        lightStatus = 4;
+        if (rxValue.length() > 0) {
+          Serial.println("*********");
+          Serial.print("Received Value: ");
+          for (int i = 0; i < rxValue.length(); i++) {
+            Serial.print(rxValue[i]);
+          }
 
+          
+          size_t string_pos = 0;
+          size_t num_value = 0;
+          while( (string_pos = rxValue.find(",")) != std::string::npos){
+            colorWheelValues[num_value] = stoi(rxValue.substr(0,string_pos));
+            num_value += 1;
+            rxValue.erase(0,string_pos + 1);
+          }
+
+          colorWheelValues[2] = stoi(rxValue.substr(0,string_pos));
+          
+          Serial.print("Setting lights to ");
+          Serial.print(colorWheelValues[0]);
+          Serial.print(", ");
+          Serial.print(colorWheelValues[1]);
+          Serial.print(", ");
+          Serial.print(colorWheelValues[2]);
+          Serial.println(".");
+      }
+      }
+      else Serial.println("Can't use,not connected");
+  }
+  
+};
 void setup() {
   Serial.begin(9600);
   delay(100);
-
 
   // Create the BLE Device
   BLEDevice::init("Bloom"); // Give it a name
@@ -151,8 +186,14 @@ void setup() {
                                          CHARACTERISTIC_UUID_RX,
                                          BLECharacteristic::PROPERTY_WRITE
                                        );
-
+  
+  BLECharacteristic *pCharacteristic2 = pService->createCharacteristic(
+                                         CHARACTERISTIC_UUID_RX2,
+                                         BLECharacteristic::PROPERTY_WRITE
+                                       );
+  
   pCharacteristic->setCallbacks(new MyCallbacks());
+  pCharacteristic2->setCallbacks(new MyCustom());
 
   // Start the service
   pService->start();
@@ -160,7 +201,6 @@ void setup() {
   // Start advertising
   pServer->getAdvertising()->start();
   Serial.println("Waiting a client connection to notify...");
-
 
 
 /*  ------------------------------ */
@@ -190,7 +230,7 @@ digitalWrite(strobePin, HIGH);
 //Create an array of different methods to dictate the mode that will be
 //running with the program
 typedef void(*Spectremodes[])();
-Spectremodes pos = {off,audio,pride,sparkle_AudioI};
+Spectremodes pos = {off,audio,pride,sparkle_AudioI,colorPicker};
 
 void loop() {
   if(connectTimer){
@@ -295,4 +335,10 @@ void sparkle_AudioI(){
   Serial.println("Sparkle");
   Color audioLights;
   audioLights.sparkleAudioI(spectrumValue);
+}
+
+void colorPicker(){
+  Color colorPicker;
+  colorPicker.customColor(colorWheelValues);
+  Serial.println("Reading user selected color");
 }
