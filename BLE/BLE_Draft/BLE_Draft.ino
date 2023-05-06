@@ -29,8 +29,8 @@ char select_code[4] = "OFF";
 /*  ------- Audio Visualizer ----- */
 /*  ------------------------------ */
 int analogPin = A0; // MSGEQ7 OUT
-int strobePin = 2; // MSGEQ7 STROBE //D1 Application // D5 Test
-int resetPin = 3                                           ; // MSGEQ7 RESET //D0 Application  // D6 Test
+int strobePin = 2;  // MSGEQ7 STROBE //D1 Application // D5 Test
+int resetPin = 3;   // MSGEQ7 RESET //D0 Application  // D6 Test
 int spectrumValue[7];
 // MSGEQ7 OUT pin produces values around 50-80
 // when there is no input, so use this value to
@@ -41,126 +41,150 @@ int brightness = 50;
 /* -------------------------------- */
 /*  ------- Control Variables ----- */
 /*  ------------------------------ */
-//Control variables to help dictate the mode running
+// Control variables to help dictate the mode running
 int lightStatus = 0;
 int colorWheelValues[3];
-//Create led object
+// Create led object
 Color led;
 
+/* -------------------------------- */
+/*  ------- BLE Characteristics ----- */
+/*  ------------------------------ */
 BLEServer *pServer;
 BLECharacteristic *pCharacteristic;
+
 bool deviceConnected = false;
 bool connectTimer = false;
-unsigned long currentMillis,prevMillis;
-#define SERVICE_UUID           "f56d1221-e24d-4b61-bbb6-cb8929f3a63b" // UART service UUID
-#define CHARACTERISTIC_UUID_RX "49360c8a-37b2-4fb8-b7f5-9957cb972fbc"
+unsigned long currentMillis, prevMillis;
+#define SERVICE_UUID "f56d1221-e24d-4b61-bbb6-cb8929f3a63b" // UART service UUID
+#define LED_MODES_UUID "49360c8a-37b2-4fb8-b7f5-9957cb972fbc"
 #define CHARACTERISTIC_UUID_TX "7afe65ae-976c-4a3a-84c1-8c33984019b7"
-#define CHARACTERISTIC_UUID_RX2 "325d04af-b205-4b96-a656-4ca6547159c8"
-class MyServerCallbacks: public BLEServerCallbacks {
-    void onConnect(BLEServer* pServer) {
-      if(!deviceConnected){
-        currentMillis = millis();
-        connectTimer = true;
-        Serial.println("Timer started to connect");
-      }
-      else{
-        Serial.println("a device is already paired");
-        ESP.restart();
-      }
-    };
+#define COLOR_WHEEL_UUID "325d04af-b205-4b96-a656-4ca6547159c8"
 
-    void onDisconnect(BLEServer* pServer) {
-      deviceConnected = false;
-      Serial.println("Device is not connected");
-      pServer->startAdvertising(); // restart advertising after disconnecting
+class MyServerCallbacks : public BLEServerCallbacks
+{
+  void onConnect(BLEServer *pServer)
+  {
+    if (!deviceConnected)
+    {
+      currentMillis = millis();
+      connectTimer = true;
+      Serial.println("Timer started to connect");
     }
+    else
+    {
+      Serial.println("a device is already paired");
+      ESP.restart();
+    }
+  };
+
+  void onDisconnect(BLEServer *pServer)
+  {
+    deviceConnected = false;
+    Serial.println("Device is not connected");
+    pServer->startAdvertising(); // restart advertising after disconnecting
+  }
 };
 
+class ControllerCallbacks : public BLECharacteristicCallbacks
+{
+  void onWrite(BLECharacteristic *pCharacteristic)
+  {
+    std::string commandReceived = pCharacteristic->getValue();
 
+    if (commandReceived.length() > 0)
+    {
+      Serial.println("*********");
+      Serial.print("Received Value: ");
+      for (int i = 0; i < commandReceived.length(); i++)
+      {
+        Serial.print(commandReceived[i]);
+      }
+      Serial.println();
 
-class MyCallbacks: public BLECharacteristicCallbacks {
-    void onWrite(BLECharacteristic *pCharacteristic) {
-      std::string rxValue = pCharacteristic->getValue();
-
-      if (rxValue.length() > 0) {
-        Serial.println("*********");
-        Serial.print("Received Value: ");
-        for (int i = 0; i < rxValue.length(); i++) {
-          Serial.print(rxValue[i]);
+      if (!deviceConnected)
+      {
+        if (commandReceived.find("CC") != -1)
+        {
+          deviceConnected = true;
+          connectTimer = false;
+          Serial.println("Successfully paired");
         }
-        Serial.println();
+      }
+      else
+      {
 
-        if(!deviceConnected){
-          if(rxValue.find("CC") != -1){
-            deviceConnected = true;
-            connectTimer = false;
-            Serial.println("Successfully paired");
-          }
-        }
-        else{
-        
         // Do stuff based on the command received from the app
-        if (rxValue.find("OFF") != -1) { 
+        if (commandReceived.find("OFF") != -1)
+        {
           lightStatus = 0;
         }
-        else if(rxValue.find("WAV") != -1){
+        else if (commandReceived.find("WAV") != -1)
+        {
           lightStatus = 1;
         }
 
-        else if(rxValue.find("PRD") != -1){
+        else if (commandReceived.find("PRD") != -1)
+        {
           lightStatus = 2;
         }
 
-        else if(rxValue.find("SA1") != -1){
+        else if (commandReceived.find("SA1") != -1)
+        {
           lightStatus = 3;
         }
-        
+      }
+
+      Serial.println();
+      Serial.println("*********");
+    }
+  }
+};
+
+class ColorWheelCallbacks : public BLECharacteristicCallbacks
+{
+  void onWrite(BLECharacteristic *pCharacteristic)
+  {
+    std::string commandReceived = pCharacteristic->getValue();
+    if (deviceConnected)
+    {
+      lightStatus = 4;
+      if (commandReceived.length() > 0)
+      {
+        Serial.println("*********");
+        Serial.print("Received Value: ");
+        for (int i = 0; i < commandReceived.length(); i++)
+        {
+          Serial.print(commandReceived[i]);
         }
 
-        Serial.println();
-        Serial.println("*********");
+        size_t string_pos = 0;
+        size_t num_value = 0;
+        while ((string_pos = commandReceived.find(",")) != std::string::npos)
+        {
+          colorWheelValues[num_value] = stoi(commandReceived.substr(0, string_pos));
+          num_value += 1;
+          commandReceived.erase(0, string_pos + 1);
+        }
+
+        colorWheelValues[2] = stoi(commandReceived.substr(0, string_pos));
+
+        Serial.print("Setting lights to ");
+        Serial.print(colorWheelValues[0]);
+        Serial.print(", ");
+        Serial.print(colorWheelValues[1]);
+        Serial.print(", ");
+        Serial.print(colorWheelValues[2]);
+        Serial.println(".");
       }
     }
-};
-
-
-class MyCustom: public BLECharacteristicCallbacks {
-  void onWrite(BLECharacteristic *pCharacteristic){
-    std::string rxValue = pCharacteristic->getValue();
-      if (deviceConnected) {
-        lightStatus = 4;
-        if (rxValue.length() > 0) {
-          Serial.println("*********");
-          Serial.print("Received Value: ");
-          for (int i = 0; i < rxValue.length(); i++) {
-            Serial.print(rxValue[i]);
-          }
-
-          
-          size_t string_pos = 0;
-          size_t num_value = 0;
-          while( (string_pos = rxValue.find(",")) != std::string::npos){
-            colorWheelValues[num_value] = stoi(rxValue.substr(0,string_pos));
-            num_value += 1;
-            rxValue.erase(0,string_pos + 1);
-          }
-
-          colorWheelValues[2] = stoi(rxValue.substr(0,string_pos));
-          
-          Serial.print("Setting lights to ");
-          Serial.print(colorWheelValues[0]);
-          Serial.print(", ");
-          Serial.print(colorWheelValues[1]);
-          Serial.print(", ");
-          Serial.print(colorWheelValues[2]);
-          Serial.println(".");
-      }
-      }
-      else Serial.println("Can't use,not connected");
+    else
+      Serial.println("Can't use,not connected");
   }
-  
 };
-void setup() {
+
+void setup()
+{
   Serial.begin(9600);
   delay(100);
 
@@ -176,24 +200,21 @@ void setup() {
 
   // Create a BLE Characteristic
   pCharacteristic = pService->createCharacteristic(
-                      CHARACTERISTIC_UUID_TX,
-                      BLECharacteristic::PROPERTY_NOTIFY
-                    );
-                      
+      CHARACTERISTIC_UUID_TX,
+      BLECharacteristic::PROPERTY_NOTIFY);
+
   pCharacteristic->addDescriptor(new BLE2902());
 
   BLECharacteristic *pCharacteristic = pService->createCharacteristic(
-                                         CHARACTERISTIC_UUID_RX,
-                                         BLECharacteristic::PROPERTY_WRITE
-                                       );
-  
+      LED_MODES_UUID,
+      BLECharacteristic::PROPERTY_WRITE);
+
   BLECharacteristic *pCharacteristic2 = pService->createCharacteristic(
-                                         CHARACTERISTIC_UUID_RX2,
-                                         BLECharacteristic::PROPERTY_WRITE
-                                       );
-  
-  pCharacteristic->setCallbacks(new MyCallbacks());
-  pCharacteristic2->setCallbacks(new MyCustom());
+      COLOR_WHEEL_UUID,
+      BLECharacteristic::PROPERTY_WRITE);
+
+  pCharacteristic->setCallbacks(new ControllerCallbacks());
+  pCharacteristic2->setCallbacks(new ColorWheelCallbacks());
 
   // Start the service
   pService->start();
@@ -202,55 +223,58 @@ void setup() {
   pServer->getAdvertising()->start();
   Serial.println("Waiting a client connection to notify...");
 
+  /*  ------------------------------ */
+  /*  -------- Set Up LEDS --------- */
+  /*  ------------------------------ */
+  led.ledSetup();
 
-/*  ------------------------------ */
-/*  -------- Set Up LEDS --------- */
-/*  ------------------------------ */
-led.ledSetup();
+  /*  ------------------------------ */
+  /*  ---- LED Visualizer Setup ---- */
+  /*  ------------------------------ */
+  // Setup the pins for reading from MSGEQ7
+  randomSeed(analogRead(A0));
+  // Read from MSGEQ7 OUT
+  pinMode(analogPin, INPUT);
+  // Write to MSGEQ7 STROBE and RESET
+  pinMode(strobePin, OUTPUT);
+  pinMode(resetPin, OUTPUT);
+  // Set analogPin's reference voltage
+  // analogReference(DEFAULT); // 5V
 
-/*  ------------------------------ */
-/*  ---- LED Visualizer Setup ---- */
-/*  ------------------------------ */
-//Setup the pins for reading from MSGEQ7
-randomSeed(analogRead(A0));
-// Read from MSGEQ7 OUT
-pinMode(analogPin, INPUT);
-// Write to MSGEQ7 STROBE and RESET
-pinMode(strobePin, OUTPUT);
-pinMode(resetPin, OUTPUT);
-// Set analogPin's reference voltage
-//analogReference(DEFAULT); // 5V
-
-// Set startup values for pins
-digitalWrite(resetPin, LOW);
-digitalWrite(strobePin, HIGH);
-
+  // Set startup values for pins
+  digitalWrite(resetPin, LOW);
+  digitalWrite(strobePin, HIGH);
 }
 
-//Create an array of different methods to dictate the mode that will be
-//running with the program
-typedef void(*Spectremodes[])();
-Spectremodes pos = {off,audio,pride,sparkle_AudioI,colorPicker};
+// Create an array of different methods to dictate the mode that will be
+// running with the program
+typedef void (*Spectremodes[])();
+Spectremodes pos = {off, audio, pride, sparkle_AudioI, colorPicker};
 
-void loop() {
-  if(connectTimer){
-    if(currentMillis - prevMillis >= 9000){
+void loop()
+{
+  if (connectTimer)
+  {
+    if (currentMillis - prevMillis >= 9000)
+    {
       Serial.println("Do not connect device");
       connectTimer = false;
       ESP.restart();
     }
   }
-  if(deviceConnected){
-    pCharacteristic -> setValue("Connected");
+  if (deviceConnected)
+  {
+    pCharacteristic->setValue("Connected");
     pCharacteristic->notify();
   }
   pos[lightStatus]();
-   // put your main code here, to run repeatedly:
+  // put your main code here, to run repeatedly:
 }
 
-//Runs the audio visualizer function to display
-//an audio spectrum across the lights
-void audio(){
+// Runs the audio visualizer function to display
+// an audio spectrum across the lights
+void audio()
+{
   Serial.println("AVI");
 
   digitalWrite(resetPin, HIGH);
@@ -260,56 +284,55 @@ void audio(){
   {
     digitalWrite(strobePin, LOW);
     delayMicroseconds(30); // Allow output to settle
- 
+
     spectrumValue[i] = analogRead(analogPin);
- 
+
     // Constrain any value above 1023 or below filterValue
     spectrumValue[i] = constrain(spectrumValue[i], filterValue, 1023);
- 
- 
+
     // Remap the value to a number between 0 and 255
     spectrumValue[i] = map(spectrumValue[i], filterValue, 1023, 0, 255);
- 
+
     // Remove serial stuff after debugging
-     //Serial.print(spectrumValue[i]);
+    // Serial.print(spectrumValue[i]);
     // Serial.print(" ");
-     digitalWrite(strobePin, HIGH);
-   }
-  //Serial.println("");
+    digitalWrite(strobePin, HIGH);
+  }
+  // Serial.println("");
   Color audioLights;
   audioLights.animate(spectrumValue);
-  
 }
 
-//Turns all leds off
-void off() {
- Serial.println("Off");
-  
-  do{                             //Start of a loop
-    brightness = brightness - 10;           //Subtract 10 from the bright variable and save it
-    FastLED.setBrightness(brightness);  //Set LED strip Brightness to the value storged in "Bright"
-    FastLED.show();                 //Update LED strip
-    delay(10);                      //Wait for 10ms
-    }while(brightness > 0);             //Go back to start of the loop if Bight is bigger then 0
-    FastLED.clear();
-    brightness = 50;                    //turn of LED strip
-    FastLED.setBrightness(brightness); 
-    FastLED.show();
+// Turns all leds off
+void off()
+{
+  Serial.println("Off");
+
+  do
+  {                                    // Start of a loop
+    brightness = brightness - 10;      // Subtract 10 from the bright variable and save it
+    FastLED.setBrightness(brightness); // Set LED strip Brightness to the value storged in "Bright"
+    FastLED.show();                    // Update LED strip
+    delay(10);                         // Wait for 10ms
+  } while (brightness > 0);            // Go back to start of the loop if Bight is bigger then 0
+  FastLED.clear();
+  brightness = 50; // turn of LED strip
+  FastLED.setBrightness(brightness);
+  FastLED.show();
 }
 
-//Changes animation to sample provided in FastLED library
-void pride(){
-    
-    Color pride;
-    pride.pridefx();
-    Serial.println("Pride is on");
-    FastLED.setBrightness(brightness); 
-    FastLED.show();
-  
+// Changes animation to sample provided in FastLED library
+void pride()
+{
+  Color pride;
+  pride.pridefx();
+  Serial.println("Pride is on");
+  FastLED.setBrightness(brightness);
+  FastLED.show();
 }
 
-
-void sparkle_AudioI(){
+void sparkle_AudioI()
+{
   digitalWrite(resetPin, HIGH);
   digitalWrite(resetPin, LOW);
   // Get all 7 spectrum values from the MSGEQ7
@@ -317,27 +340,28 @@ void sparkle_AudioI(){
   {
     digitalWrite(strobePin, LOW);
     delayMicroseconds(30); // Allow output to settle
- 
+
     spectrumValue[i] = analogRead(analogPin);
- 
+
     // Constrain any value above 1023 or below filterValue
     spectrumValue[i] = constrain(spectrumValue[i], filterValue, 1023);
- 
- 
+
     // Remap the value to a number between 0 and 255
     spectrumValue[i] = map(spectrumValue[i], filterValue, 1023, 0, 255);
- 
+
     // Remove serial stuff after debugging
-    //Serial.print(spectrumValue[i]);
-    //Serial.print(" ");
+    // Serial.print(spectrumValue[i]);
+    // Serial.print(" ");
     digitalWrite(strobePin, HIGH);
-   }
+  }
   Serial.println("Sparkle");
   Color audioLights;
   audioLights.sparkleAudioI(spectrumValue);
 }
 
-void colorPicker(){
+// Change LEDs to user selected color
+void colorPicker()
+{
   Color colorPicker;
   colorPicker.customColor(colorWheelValues);
   Serial.println("Reading user selected color");
