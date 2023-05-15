@@ -9,6 +9,8 @@
 import SwiftUI
 
 struct COLOR: View {
+    @EnvironmentObject var bleManager : BLEManager
+
     var diameter: CGFloat
     /*Calculate radius of actual color wheel*/
     ///note the variable radius will actually be twice the size of the actual radius drawn
@@ -123,9 +125,13 @@ struct COLOR: View {
                                 
                                 sat = findColorsat(distance: dist, radius: radii)
 
-                                print("hue \(hue)")
+                                print("sat \(sat)")
                                 
-                            }   
+//                                self.bleManager.sendCustomColor(hue: hue, sat: sat, brightness: bright)
+                            }
+                            .onEnded{ val in
+                                self.bleManager.sendCustomColor(hue: hue, sat: sat, brightness: bright)
+                            }
                     )
                 )
             }

@@ -12,10 +12,10 @@ struct Connections: View {
    //@ObservedObject var bleManager = BLEManager()
 
     @State var modeSelect : UInt8 = 255
-
+    
     @Binding var status:Bool
     @Binding var isConnected:Bool
-
+    
 
     var body: some View {
         ZStack{

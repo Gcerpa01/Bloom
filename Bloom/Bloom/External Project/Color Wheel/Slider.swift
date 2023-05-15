@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct Slider: View {
+    @EnvironmentObject var bleManager : BLEManager
+
     @State var lastOffset: CGFloat = 0.0
     @Binding var value: CGFloat
     @Binding var bright:Double
@@ -75,9 +77,10 @@ struct Slider: View {
                                     
                                     //compute brighness value by mappint from 0 to 1
                                     bright = sliderVal.map(from: 0...100, to: 0...1)
-                                    let y = print("brightness \(bright)")
-
                             }
+                        .onEnded{ val in
+                                    self.bleManager.sendCustomColor(hue: hue, sat: sat, brightness: bright)
+                                }
                         )
 
                     Spacer()

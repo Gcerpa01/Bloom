@@ -55,7 +55,7 @@ BLECharacteristic *pCharacteristic;
 
 bool deviceConnected = false;
 bool connectTimer = false;
-unsigned long currentMillis, prevMillis;
+unsigned long currentMillis, prevMillis = 0;
 #define SERVICE_UUID "f56d1221-e24d-4b61-bbb6-cb8929f3a63b" // UART service UUID
 #define LED_MODES_UUID "49360c8a-37b2-4fb8-b7f5-9957cb972fbc"
 #define CHARACTERISTIC_UUID_TX "7afe65ae-976c-4a3a-84c1-8c33984019b7"
@@ -67,7 +67,7 @@ class MyServerCallbacks : public BLEServerCallbacks
   {
     if (!deviceConnected)
     {
-      currentMillis = millis();
+      prevMillis = millis();
       connectTimer = true;
       Serial.println("Timer started to connect");
     }
@@ -110,6 +110,7 @@ class ControllerCallbacks : public BLECharacteristicCallbacks
           connectTimer = false;
           Serial.println("Successfully paired");
         }
+        else Serial.println("Incorrect");
       }
       else
       {
@@ -255,6 +256,7 @@ void loop()
 {
   if (connectTimer)
   {
+    currentMillis = millis();
     if (currentMillis - prevMillis >= 9000)
     {
       Serial.println("Do not connect device");
@@ -364,5 +366,5 @@ void colorPicker()
 {
   Color colorPicker;
   colorPicker.customColor(colorWheelValues);
-  Serial.println("Reading user selected color");
+//  Serial.println("Reading user selected color");
 }

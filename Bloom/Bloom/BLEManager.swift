@@ -26,7 +26,9 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate,CBPeriphe
     @Published var CBperipherals = [CBPeripheral]()
     
     var bloomDevice:CBPeripheral!
-    var bloomCommand:CBCharacteristic!
+    var bloomCommandMode:CBCharacteristic!
+    var bloomCustomColors:CBCharacteristic!
+    var connected: Bool = false
     
     var dataVal : UInt8 = 255
     
@@ -91,6 +93,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate,CBPeriphe
         bloomDevice = CBperipherals[item.id]
         self.bloomDevice.delegate = self
         myCentral.connect(bloomDevice)
+        connected = true
     }
     
     //Check for peripherals services
@@ -107,7 +110,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate,CBPeriphe
                             print(service.uuid)
                             print(service.uuid.uuidString)
                     //check for known coded source froma Arduino Project
-                    if service.uuid == CBUUID(string:"4fafc201-1fb5-459e-8fcc-c5c9c331914b"){
+                    if service.uuid == CBUUID(string:"f56d1221-e24d-4b61-bbb6-cb8929f3a63b"){
                         self.bloomDevice.discoverCharacteristics(nil, for: service)
                     }
                         }
@@ -120,19 +123,22 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate,CBPeriphe
             print("list of characteristics")
             for characteristic in serviceCharacteristics {
                 print(characteristic) //find available characteristics
-                if characteristic.uuid == CBUUID(string:"beb5483e-36e1-4688-b7f5-ea07361b26a8"){
-                    print("connected")
-                    self.bloomCommand = characteristic
+                if characteristic.uuid == CBUUID(string: "49360c8a-37b2-4fb8-b7f5-9957cb972fbc"){
+                    self.bloomCommandMode = characteristic
+                }
+                else if characteristic.uuid == CBUUID(string: "325d04af-b205-4b96-a656-4ca6547159c8"){
+                    self.bloomCustomColors = characteristic
                 }
             }
         }
+        self.sendAnimation(selectedmode: "CC")
     }
     
-    //print if peripheral is disconnected
-    func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
-        print("Peripheral Disconnected")
-        //myCentral.scanForPeripherals(withServices: [serviceUUID], options: nil)
+    //Attempt to reconnect if disconnected
+    func centralManager(_ central: CBCentralManager, didDisconnectPeripheral bloomDevice: CBPeripheral, error: Error?) {
+        central.connect(bloomDevice, options: nil)
     }
+    
     
     
     func sendAnimation(selectedmode:String){
@@ -140,11 +146,24 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate,CBPeriphe
         //convert digit to NSData type for sending over BLE
         //**Sending Data for String**//
         let valueString = (selectedmode as NSString).data(using: String.Encoding.utf8.rawValue)
-        bloomDevice.writeValue(valueString!, for: bloomCommand, type: CBCharacteristicWriteType.withoutResponse)
-
+        bloomDevice.writeValue(valueString!, for: bloomCommandMode, type: CBCharacteristicWriteType.withResponse)
+        
     }
     
 
+    func sendCustomColor(hue:Double,sat:Double, brightness:Double){
+        //dataVal = selectedmode
+        //convert digit to NSData type for sending over BLE
+        //**Sending Data for String**//
+        
+        let s_hue = String(Int(max(0,min(255,(hue/1.0)*255))))
+        let s_sat = String(Int(max(0,min(255,(sat/1.6)*255))))
+        let s_bright = String(Int(max(0,min(255,(brightness/1.0)*255))))
+        let customColor = s_hue + "," + s_sat + "," + s_bright
+        let valueString = (customColor as NSString).data(using: String.Encoding.utf8.rawValue)
+        bloomDevice.writeValue(valueString!, for: bloomCustomColors, type: CBCharacteristicWriteType.withResponse)
+    }
     
 }
+
 
