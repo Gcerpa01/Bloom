@@ -29,8 +29,8 @@ char select_code[4] = "OFF";
 /*  ------- Audio Visualizer ----- */
 /*  ------------------------------ */
 int analogPin = A0; // MSGEQ7 OUT
-int strobePin = 2;  // MSGEQ7 STROBE //D1 Application // D5 Test
-int resetPin = 3;   // MSGEQ7 RESET //D0 Application  // D6 Test
+int strobePin = 1;  // MSGEQ7 STROBE //D1 Application // D5 Test
+int resetPin = 2;   // MSGEQ7 RESET //D0 Application  // D6 Test
 int spectrumValue[7];
 // MSGEQ7 OUT pin produces values around 50-80
 // when there is no input, so use this value to

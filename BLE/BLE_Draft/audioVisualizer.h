@@ -7,7 +7,7 @@
 
 #define NUM_LEDS 300
 #define LED_TYPE WSB2812b
-#define DATA_PIN D6 //TEST D7 //note application uses D4 but fastLED GPIO layout has it differently
+#define DATA_PIN D7 //TEST D7 //note application uses D4 but fastLED GPIO layout has it differently
 
 // Define color structure for lights
 class Color{
