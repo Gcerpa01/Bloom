@@ -1,0 +1,50 @@
+*Pick And Place List
+*Company=
+*Author=
+*eMail=
+*
+*Project=PCB Design
+*Date=19:22:27
+*CreatedBy=Fritzing 0.9.10b.2022-07-01.CD-2134-0-40d23c29
+*
+*
+*Coordinates in mm, always center of component
+*Origin 0/0=Lower left corner of PCB
+*Rotation in degree (0-360, math. pos.)
+*
+*No;Value;Package;X;Y;Rotation;Side;Name
+1;;;29.3194;-22.8319;0;Bottom;Via14
+2;;;38.2094;-26.6419;0;Bottom;Via13
+3;;;22.9694;-39.3418;0;Bottom;Via5
+4;;;42.9095;-54.0337;0;Top;Vin
+5;;;40.7495;-5.05182;0;Top;GND
+6;;;20.4294;-32.9918;0;Bottom;Via18
+7;;;79.6115;-22.606;0;Top;GND1
+8;100nF;100 mil [THT, multilayer];48.3695;-17.7518;0;Bottom;C1
+9;;;14.7842;-26.2972;-90;Bottom;ESP32
+10;;;75.4371;-10.125;90;Bottom;ESP32C3
+11;220k;THT;57.2595;-45.6918;90;Bottom;R2
+12;33pF;100 mil [THT, multilayer];44.5595;-38.0718;-180;Bottom;C2
+13;;;12.8094;-39.3418;0;Bottom;Via3
+14;;;58.5294;-26.6419;0;Bottom;Via10
+15;;;77.4615;-39.4858;-90;Bottom;PCM5102A
+16;;;73.4026;-22.606;0;Top;Vin1
+17;220k;THT;62.3395;-41.8818;90;Bottom;R3
+18;;;24.2394;-50.7718;0;Bottom;Via16
+19;;;34.3994;-8.86192;0;Bottom;Via9
+20;;;31.8594;-32.9918;0;Bottom;Via7
+21;100nF;100 mil [THT, multilayer];52.1795;-36.8018;-90;Bottom;C3
+22;;;12.8094;-25.3719;0;Bottom;Via4
+23;;;48.3694;-54.0174;0;Top;GND
+24;;;34.3995;-5.05182;0;Top;Vin
+25;;;38.2094;-20.2919;0;Bottom;Via12
+26;;;17.8894;-50.7718;0;Bottom;Via15
+27;;;22.9694;-25.3719;0;Bottom;Via6
+28;;;47.0994;-41.8818;0;Bottom;Via1
+29;;;15.3494;-32.9918;0;Bottom;Via17
+30;100nF;100 mil [THT, multilayer];57.2595;-36.8018;-90;Bottom;C4
+31;;;59.7994;-19.0219;0;Bottom;Via11
+32;;;45.6177;-54.0174;0;Top;Din
+33;;THT;50.9095;-27.9118;-90;Bottom;MSGEQ
+34;200k;THT;42.0195;-34.2618;0;Bottom;R1
+35;;;38.2094;-29.1818;0;Bottom;Via2
