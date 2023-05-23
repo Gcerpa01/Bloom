@@ -28,9 +28,9 @@ char select_code[4] = "OFF";
 /*  ------------------------------ */
 /*  ------- Audio Visualizer ----- */
 /*  ------------------------------ */
-int analogPin = A0; // MSGEQ7 OUT
-int strobePin = 1;  // MSGEQ7 STROBE //D1 Application // D5 Test
-int resetPin = 2;   // MSGEQ7 RESET //D0 Application  // D6 Test
+int analogPin = 2; // MSGEQ7 OUT
+int strobePin = 3;  // MSGEQ7 STROBE //D1 Application // D5 Test
+int resetPin = 4;   // MSGEQ7 RESET //D0 Application  // D6 Test
 int spectrumValue[7];
 // MSGEQ7 OUT pin produces values around 50-80
 // when there is no input, so use this value to
@@ -352,8 +352,8 @@ void sparkle_AudioI()
     spectrumValue[i] = map(spectrumValue[i], filterValue, 1023, 0, 255);
 
     // Remove serial stuff after debugging
-    // Serial.print(spectrumValue[i]);
-    // Serial.print(" ");
+     Serial.print(spectrumValue[i]);
+     Serial.print(" ");
     digitalWrite(strobePin, HIGH);
   }
   Serial.println("Sparkle");
