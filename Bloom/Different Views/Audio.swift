@@ -68,7 +68,6 @@ struct Audio: View {
                         Button(action:{
                             chosenMode = "WAV"
                             self.bleManager.sendAnimation(selectedmode: chosenMode)
-                            print("Play with rainbow")
                         }, label: {
                             VStack(alignment: .center){
                                 Image(systemName: "globe.asia.australia")
@@ -99,7 +98,6 @@ struct Audio: View {
                         Button(action:{
                             chosenMode = "SA1"
                             self.bleManager.sendAnimation(selectedmode: chosenMode)
-                            print("Sparkle I")
                         }, label: {
                             VStack(alignment:.center){
                                 Image(systemName: "globe.asia.australia")
@@ -135,7 +133,6 @@ struct Audio: View {
                         Button(action:{
                             chosenMode = "SA2"
                             // self.bleManager.sendAnimation(selectedmode: chosenMode)
-                            print("Play with Sparkle II")
                         }, label: {
                             VStack(alignment: .center){
                                 Image(systemName: "globe.asia.australia")

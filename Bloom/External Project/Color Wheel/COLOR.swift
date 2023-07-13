@@ -46,14 +46,15 @@ struct COLOR: View {
                                                              Color(hue:0.2, saturation:1.0, brightness:0.9),
                                                              Color(hue:0.1, saturation:1.0, brightness:0.9),
                                                              Color(hue:0.0, saturation:1.0, brightness:0.9)
-                                                             
+
                                                             ]), center: .center))
                     .frame(width: self.diameter, height: self.diameter)
+
                     .overlay(
                         Circle()
                             .fill(
                                 RadialGradient(gradient:Gradient(colors: [Color.white,
-                                                                          Color.white.opacity(0.00000001)]), center: .center, startRadius: 0, endRadius: radii)
+                                                                          Color.white.opacity(0.00001)]), center: .center, startRadius: 0, endRadius: radii)
                             )
                     )
                 
@@ -94,7 +95,7 @@ struct COLOR: View {
                                 
                                 let center = CGPoint(x: radii, y: radii)
                                 
-                                print("current pos: \(current_pos)")
+//                                print("current pos: \(current_pos)")
                                 
 //                                print("center: \(center)")
                                 
@@ -117,15 +118,15 @@ struct COLOR: View {
 
                                 if dist == 0{return}
                                 
-                                print("angle \(angle)")
+                                // print("angle \(angle)")
                                 
                                 hue = findColorhue(x: angle.degrees)
 
-                                print("hue \(hue)")
+//                                print("hue \(hue)")
                                 
                                 sat = findColorsat(distance: dist, radius: radii)
 
-                                print("sat \(sat)")
+//                                print("sat \(sat)")
                                 
 //                                self.bleManager.sendCustomColor(hue: hue, sat: sat, brightness: bright)
                             }
@@ -143,6 +144,6 @@ struct COLOR: View {
 
 struct COLOR_Previews: PreviewProvider {
     static var previews: some View {
-        COLOR(diameter: 250, bright: .constant(0.9),sat:.constant(0.9),hue:.constant(0.9),selected_position: .constant(CGPoint(x: 100, y: 100)))
+        COLOR(diameter: 250, bright: .constant(0.9),sat:.constant(0.4),hue:.constant(0.75),selected_position: .constant(CGPoint(x: 100, y: 100)))
     }
 }

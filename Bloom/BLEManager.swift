@@ -68,23 +68,20 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate,CBPeriphe
         
         if(peripheralName.contains("Bloom")){
             let newPeripheral = Peripheral(id:peripherals.count, name: peripheralName, rssi: RSSI.intValue)
-            print(newPeripheral)
+
             peripherals.append(newPeripheral)
             CBperipherals.append(peripheral)
-            print(peripheral)
         }
         
     }
     
     //Scan
     func startScanning(){
-        print("Scanning Devices")
         myCentral.scanForPeripherals(withServices: nil, options: nil)
     }
     
     //Stop Scanning
     func stopScanning(){
-        print("Yeeting Devices")
         myCentral.stopScan()
     }
     
@@ -105,10 +102,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate,CBPeriphe
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
             //print list of services provided by peripheral
             if let peripheralServices = peripheral.services {
-                    print("list of services")
                     for service in peripheralServices {
-                            print(service.uuid)
-                            print(service.uuid.uuidString)
                     //check for known coded source froma Arduino Project
                     if service.uuid == CBUUID(string:"f56d1221-e24d-4b61-bbb6-cb8929f3a63b"){
                         self.bloomDevice.discoverCharacteristics(nil, for: service)
@@ -120,9 +114,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate,CBPeriphe
     //Find characteristics of the Peripheral
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
         if let serviceCharacteristics = service.characteristics {
-            print("list of characteristics")
-            for characteristic in serviceCharacteristics {
-                print(characteristic) //find available characteristics
+            for characteristic in serviceCharacteristics { //find available characteristics
                 if characteristic.uuid == CBUUID(string: "49360c8a-37b2-4fb8-b7f5-9957cb972fbc"){
                     self.bloomCommandMode = characteristic
                 }
@@ -157,6 +149,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate,CBPeriphe
         //**Sending Data for String**//
         
         let s_hue = String(Int(max(0,min(255,(hue/1.0)*255))))
+
         let s_sat = String(Int(max(0,min(255,(sat/1.6)*255))))
         let s_bright = String(Int(max(0,min(255,(brightness/1.0)*255))))
         let customColor = s_hue + "," + s_sat + "," + s_bright

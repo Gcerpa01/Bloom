@@ -7,7 +7,8 @@ CRGB leds[NUM_LEDS];
 
 //Setup LEDs to start being turned off
 void Color :: ledSetup(){  
-  LEDS.addLeds<WS2812,DATA_PIN,RGB>(leds,NUM_LEDS);
+  LEDS.addLeds<WS2812,DATA_PIN,GRB>(leds,NUM_LEDS);
+  //LEDS.addLeds<WS2812,DATA_PIN,RGB>(leds,NUM_LEDS); //if lights were manufactured with correct order of color channels
   LEDS.setBrightness(84);
   for(int i = 0; i < NUM_LEDS; i++){
     leds[i] = CRGB(0,0,0);

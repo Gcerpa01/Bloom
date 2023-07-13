@@ -71,7 +71,6 @@ struct MainView: View {
                         Button(action: {
                             chosenMode = "OFF"
                             self.bleManager.sendAnimation(selectedmode: chosenMode)
-                            print("powering on")
                         }, label:{
                             Image(systemName: "togglepower")
                                 .resizable()
@@ -127,7 +126,6 @@ struct MainView: View {
                     if(isConnected){
                         Button(action:{
                             showAudio = true
-                            print("Look at audio visualizers")
                         }, label: {
                             VStack{
                                 Image(systemName: "globe.asia.australia")
@@ -149,7 +147,6 @@ struct MainView: View {
                     
                         Button(action:{
                             showAnimation = true
-                            print("Choosing between basics")
                         }, label: {
                             VStack{
                                 Image(systemName: "globe.asia.australia")
@@ -172,7 +169,6 @@ struct MainView: View {
                     
                      else{
                          Button(action:{
-                             print("NOPE")
                          }, label: {
                              VStack{
                                  Image(systemName: "globe.asia.australia")
@@ -193,7 +189,6 @@ struct MainView: View {
                              .opacity(0.5)
                         
                          Button(action:{
-                             print("NOPE")
                          }, label: {
                              VStack{
                                  Image(systemName: "globe.asia.australia")
@@ -232,7 +227,6 @@ struct MainView: View {
                 if(isConnected){
                     Button(action:{
                         showModal = true
-                        print("Colour Wheel weee")
                     }, label: {
                         VStack{
                             Image(systemName: "globe.asia.australia")
@@ -252,7 +246,6 @@ struct MainView: View {
                 }
                 else{
                     Button(action:{
-                        print("NOPE")
                     }, label: {
                         VStack{
                             Image(systemName: "globe.asia.australia")
