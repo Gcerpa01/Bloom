@@ -4,10 +4,12 @@ Current development of a BLE Application utilizing Swift UI. This app is meant t
 # General Information
 This project has been in the making for three years as an introduction to Arduino Microcontrollers, Bluetooth Low Energy, and Swift. We utilize the Bloom app in order to tell the ESP which mode we want the microcontroller to be in so that the lights display the desired animation. When in audio visualizer, we connect our audio source to an attached bluetooth receiver (ESP32 + PCM5102) to read the audio and the MSGEQ7 then divides the audio frequencies for the ESP32-C3 to create an audio visualizer using the connected LED lights. Additionally, we take use of the PCM5102's output jack to connect an external speaker to listen to the audio being played. 
 
+
+# Demo
+[![Demo](https://img.youtube.com/vi/ml52ldNw_ss/maxresdefault.jpg)](https://youtu.be/ml52ldNw_ss)
+
 A timeline of my improvements and steps in this journey can be found [in this twitter thread] (https://twitter.com/PunaticGerry/status/1292268597901811712?s=20) as well as in this github repro.
 **further information will be provided below**.
-
- ***Videos of the final product can also be found in the twitter thread***
  
  ---
  ## Steps and Resources
