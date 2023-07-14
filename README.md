@@ -25,7 +25,7 @@ A timeline of my improvements and steps in this journey can be found [in this tw
 1. [Makers Portal](https://makersportal.com/blog/2019/10/14/bluetooth-module-with-arduino)
 2. [Instructables](https://www.instructables.com/WS2812-controlled-with-Bluetooth-and-Arduino)
  
-The finished code for the Arduino side can be found in the [**BLE_Arduino**](https://github.com/Gcerpa01/Bloom/tree/main/BLE_Arduino) folder 
+The finished code for the Arduino side can be found in the [**BLE_Arduino**](https://github.com/Gcerpa01/Bloom/tree/main/BLE_Arduino) folder. Please note that the color wheel feature is not compatible when using the HM-10 Module.
  
 ### 2. Communicating via an App
  Once I finished being able to communicate with the Arduino I then began to look for tutorials on writing BLE applications on iOS. The ones I found helpful were the following:
